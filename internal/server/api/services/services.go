@@ -108,8 +108,9 @@ func GetServiceInfo(e *env.Env, c echo.Context) error {
 	}
 
 	info := map[string]string{
-		"version": "", "internal-ip": "", "status": "",
+		"internal-ip": "", "status": "",
 	}
+
 	for key := range info {
 		cmd := fmt.Sprintf("%s:info %s %s", req.Type, req.Name, fmt.Sprintf("--%s", key))
 		out, err := e.Dokku.Exec(cmd)
