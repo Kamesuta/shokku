@@ -2,6 +2,9 @@ package services
 
 import (
 	"fmt"
+	"net/http"
+	"strings"
+
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 	"github.com/texm/dokku-go"
@@ -9,8 +12,6 @@ import (
 	"gitlab.com/texm/shokku/internal/models"
 	"gitlab.com/texm/shokku/internal/server/commands"
 	"gitlab.com/texm/shokku/internal/server/dto"
-	"net/http"
-	"strings"
 )
 
 var (
@@ -110,10 +111,10 @@ func GetServiceInfo(e *env.Env, c echo.Context) error {
 		"version": "", "internal-ip": "", "status": "", // "dsn": "",
 	}
 	for key := range info {
-		cmd := fmt.Sprintf("%s:info %s --%s", req.Type, req.Name, key)
+		cmd := fmt.Sprintf("dokku %s:info %s --%s", req.Type, req.Name, key)
 		out, err := e.Dokku.Exec(cmd)
 		if err != nil {
-			return fmt.Errorf("getting service info: Command: %s | %s:info %s --%s %w", cmd, req.Type, req.Name, key, err)
+			return fmt.Errorf("getting service info: Command: '%s' | %s:info %s --%s %w", cmd, req.Type, req.Name, key, err)
 		}
 		info[key] = out
 	}
