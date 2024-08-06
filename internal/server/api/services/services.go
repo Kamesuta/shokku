@@ -111,10 +111,9 @@ func GetServiceInfo(e *env.Env, c echo.Context) error {
 	}
 	for key := range info {
 		cmd := fmt.Sprintf("%s:info %s --%s", req.Type, req.Name, key)
-		fmt.Printf("Executing... dokku %s", cmd)
 		out, err := e.Dokku.Exec(cmd)
 		if err != nil {
-			return fmt.Errorf("getting service info: %s:info %s --%s %w", req.Type, req.Name, key, err)
+			return fmt.Errorf("getting service info: Command: %s | %s:info %s --%s %w", cmd, req.Type, req.Name, key, err)
 		}
 		info[key] = out
 	}
