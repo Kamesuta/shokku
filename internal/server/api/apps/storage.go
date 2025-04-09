@@ -94,8 +94,18 @@ func UnmountAppStorage(e *env.Env, c echo.Context) error {
 		return err.ToHTTP()
 	}
 
+	var hostDir string
+	switch req.StorageType {
+		case "Docker Volume":
+			hostDir = req.HostDir
+		case "Dokku Storage":
+			hostDir = fmt.Sprintf("/var/lib/dokku/data/storage/%s", req.HostDir)
+		default:
+			return fmt.Errorf("invalid storage type: %s", req.StorageType)
+	}
+
 	mount := dokku.StorageBindMount{
-		HostDir:      req.HostDir,
+		HostDir:      hostDir,
 		ContainerDir: req.ContainerDir,
 	}
 	if err := e.Dokku.UnmountAppStorage(req.Name, mount); err != nil {

@@ -27,26 +27,17 @@
 
   const tryUnmount = (e) => {
     const restart = e.detail.extraOptionChecked;
-    dispatch("unmount", { hostDir, mountDir, restart });
+    dispatch("unmount", { hostDir: (isDokkuManaged ? hostDokkuDir : hostDir), mountDir, restart });
   };
 </script>
 
 <div class="flex flex-row gap-2">
   <div class="flex items-center flex-grow">
-    <label class="input-group input-group-md" class:hidden={isDokkuManaged}>
-      <span class="w-auto">Mounted Path</span>
+    <label class="input-group input-group-md">
+      <span class="w-auto">{isDokkuManaged ? "Dokku Storage Name" : "Docker Volume Name"}</span>
       <input
         type="text"
-        value={hostDir}
-        class="input input-md input-bordered flex-grow"
-        disabled
-      />
-    </label>
-    <label class="input-group input-group-md" class:hidden={!isDokkuManaged}>
-      <span class="w-auto">Dokku Storage Name</span>
-      <input
-        type="text"
-        value={hostDokkuDir}
+        value={isDokkuManaged ? hostDokkuDir : hostDir}
         class="input input-md input-bordered flex-grow"
         disabled
       />
