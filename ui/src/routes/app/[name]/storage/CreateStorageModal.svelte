@@ -9,11 +9,11 @@
   export let error;
 
   const storageTypes = {
-    "New Storage": { label: "Storage Name" },
-    // "Mount Existing Directory": {"label": "Existing Path to Mount"}
+    "Docker Volume": { label: "Volume Name" },
+    "Dokku Storage": {"label": "/var/lib/dokku/data/storage/"},
   };
 
-  let selectedType = "New Storage";
+  let selectedType = "Docker Volume";
   let hostDir = "";
   let mountDir = "";
   let typeOptions = Object.keys(storageTypes);

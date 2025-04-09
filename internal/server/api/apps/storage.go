@@ -62,16 +62,23 @@ func MountAppStorage(e *env.Env, c echo.Context) error {
 		return err.ToHTTP()
 	}
 
-	if req.StorageType == "New Storage" {
-		// TODO: actually chown properly
-		err := e.Dokku.EnsureStorageDirectory(req.Name, dokku.StorageChownOptionHerokuish)
-		if err != nil {
-			return fmt.Errorf("ensuring app storage dir: %w", err)
-		}
+	var hostDir string
+	switch req.StorageType {
+		case "Docker Volume":
+			hostDir = req.HostDir
+		case "Dokku Storage":
+			// TODO: actually chown properly
+			err := e.Dokku.EnsureStorageDirectory(req.HostDir, dokku.StorageChownOptionHerokuish)
+			if err != nil {
+				return fmt.Errorf("ensuring app storage dir: %w", err)
+			}
+			hostDir = fmt.Sprintf("/var/lib/dokku/data/storage/%s", req.HostDir)
+		default:
+			return fmt.Errorf("invalid storage type: %s", req.StorageType)
 	}
 
 	mount := dokku.StorageBindMount{
-		HostDir:      req.HostDir,
+		HostDir:      hostDir,
 		ContainerDir: req.ContainerDir,
 	}
 	if err := e.Dokku.MountAppStorage(req.Name, mount); err != nil {
