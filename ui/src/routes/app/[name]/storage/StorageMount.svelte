@@ -27,7 +27,7 @@
 
   const tryUnmount = (e) => {
     const restart = e.detail.extraOptionChecked;
-    dispatch("unmount", { hostDir: (isDokkuManaged ? hostDokkuDir : hostDir), mountDir, restart });
+    dispatch("unmount", { hostDir, mountDir, restart });
   };
 </script>
 

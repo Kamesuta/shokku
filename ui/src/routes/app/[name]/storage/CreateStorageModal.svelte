@@ -8,6 +8,7 @@
   export let loading;
   export let error;
 
+  const dokkuDir = "/var/lib/dokku/data/storage/";
   const storageTypes = {
     "Docker Volume": { label: "Volume Name" },
     "Dokku Storage": {"label": "/var/lib/dokku/data/storage/"},
@@ -21,7 +22,8 @@
   const dispatch = createEventDispatcher();
 
   const dispatchCreateStorage = () => {
-    const options = { selectedType, hostDir, mountDir };
+    const fullHostDir = selectedType === "Dokku Storage" ? `${dokkuDir}${hostDir}` : hostDir;
+    const options = { hostDir: fullHostDir, mountDir };
     dispatch("create", options);
   };
 </script>
