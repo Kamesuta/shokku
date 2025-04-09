@@ -58,7 +58,7 @@ func GetAppStorage(e *env.Env, c echo.Context) error {
 }
 
 // Check if the path is a valid Docker volume or a valid Dokku storage path
-var mountRegex = regexp.MustCompile(`^(?:/var/lib/dokku/data/storage/)?\w{2,}$`)
+var mountRegex = regexp.MustCompile(`^(/var/lib/dokku/data/storage/)?(\w{2,})$`)
 
 func MountAppStorage(e *env.Env, c echo.Context) error {
 	var req dto.AlterAppStorageRequest
@@ -66,13 +66,17 @@ func MountAppStorage(e *env.Env, c echo.Context) error {
 		return err.ToHTTP()
 	}
 
-	if !mountRegex.MatchString(req.HostDir) {
+	matches := mountRegex.FindStringSubmatch(req.HostDir)
+	if matches == nil {
 		return fmt.Errorf("invalid storage path: %s", req.HostDir)
 	}
 
-	err := e.Dokku.EnsureStorageDirectory(req.HostDir, dokku.StorageChownOptionHerokuish)
-	if err != nil {
-		return fmt.Errorf("ensuring app storage dir: %w", err)
+	// Ensure storage directory if it is Dokku's storage directory
+	if matches[1] != "" {
+		err := e.Dokku.EnsureStorageDirectory(matches[2], dokku.StorageChownOptionHerokuish)
+		if err != nil {
+			return fmt.Errorf("ensuring app storage dir: %w", err)
+		}
 	}
 
 	mount := dokku.StorageBindMount{
