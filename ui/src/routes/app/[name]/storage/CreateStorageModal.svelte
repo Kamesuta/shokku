@@ -14,7 +14,7 @@
     "Dokku Storage": {"label": "/var/lib/dokku/data/storage/"},
   };
 
-  let selectedType = "Docker Volume";
+  let selectedType = "Dokku Storage";
   let hostDir = "";
   let mountDir = "";
   let typeOptions = Object.keys(storageTypes);

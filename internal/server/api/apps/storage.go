@@ -71,7 +71,7 @@ func MountAppStorage(e *env.Env, c echo.Context) error {
 		return fmt.Errorf("invalid storage path: %s", req.HostDir)
 	}
 
-	// Ensure storage directory if it is Dokku's storage directory
+	// Ensure storage directory if it is a valid Dokku storage path
 	if matches[1] != "" {
 		err := e.Dokku.EnsureStorageDirectory(matches[2], dokku.StorageChownOptionHerokuish)
 		if err != nil {
