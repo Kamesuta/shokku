@@ -32,20 +32,25 @@
 </script>
 
 <div class="flex flex-row gap-2">
-  <div class="flex items-center" class:flex-grow={!isDokkuManaged}>
+  <div class="flex items-center flex-grow">
     <label class="input-group input-group-md" class:hidden={isDokkuManaged}>
       <span class="w-auto">Mounted Path</span>
       <input
         type="text"
         value={hostDir}
-        class="input input-md input-bordered"
+        class="input input-md input-bordered flex-grow"
         disabled
-        class:flex-grow={!isDokkuManaged}
       />
     </label>
-    <div class="" class:hidden={!isDokkuManaged}>
-      <span class="font-bold">{hostDokkuDir}</span>
-    </div>
+    <label class="input-group input-group-md" class:hidden={!isDokkuManaged}>
+      <span class="w-auto">Dokku Storage Name</span>
+      <input
+        type="text"
+        value={hostDokkuDir}
+        class="input input-md input-bordered flex-grow"
+        disabled
+      />
+    </label>
   </div>
 
   <div class="flex-grow">
